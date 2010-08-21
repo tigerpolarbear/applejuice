@@ -17,7 +17,7 @@ climatecontroller: $(OBJFILES)
 -include $(DEPFILES)
 
 %.o: %.c Makefile
-	$(CC) $(CFLAGS) -MMD -MP -MT "$*.d" -c -o $@ $<
+	$(CC) $(CFLAGS) -D DEBUG -MMD -MP -MT "$*.d" -c -o $@ $<
 
 # Clean
 clean:

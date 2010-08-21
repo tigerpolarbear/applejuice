@@ -10,8 +10,6 @@
 #include <lualib.h>
 #include <lauxlib.h>
 
-#define DEBUG
-
 // Functions for the Lua environment
 // static int functionname (lua_State *L);
 static int ccframe_new(lua_State *L);
