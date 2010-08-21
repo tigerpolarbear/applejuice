@@ -27,6 +27,8 @@ static int ccframe_geth(lua_State *L);
 static int ccimage_new(lua_State * L);
 
 static int ccblit(lua_State * L);
+static int ccblitto(lua_State * L);
+static int ccblitwholeto(lua_State * L);
 
 static int ccsleep(lua_State * L);
 static int ccflip(lua_State * L);
@@ -45,6 +47,8 @@ static const struct luaL_reg cc [] = {
 	{"image_new", ccimage_new},
 
 	{"blit", ccblit},
+	{"blitto", ccblitto},
+	{"blitwholeto", ccblitwholeto},
 
 	{"sleep", ccsleep},
 	{"flip", ccflip},
@@ -253,6 +257,35 @@ static int ccblit(lua_State * L) {
 	return 0;
 }
 
+static int ccblitto(lua_State * L) {
+	SDL_Surface ** src = lua_touserdata(L, 1);
+	SDL_Rect * srcr = lua_touserdata(L, 2);
+	SDL_Surface * dst = SDL_GetVideoSurface(); 
+	int x = lua_tonumber(L, 3);
+	int y = lua_tonumber(L, 4);
+	SDL_Rect * dstr = malloc(sizeof(SDL_Rect));
+	dstr->w = srcr->w;
+	dstr->h = srcr->h;
+	dstr->x = x;
+	dstr->y = y;
+	SDL_BlitSurface(*src, srcr, dst, dstr);
+	return 0;
+}
+
+static int ccblitwholeto(lua_State * L) {
+	SDL_Surface ** src = lua_touserdata(L, 1);
+	SDL_Rect * srcr = &((*src)->clip_rect);
+	int x = lua_tonumber(L, 2);
+	int y = lua_tonumber(L, 3);
+	SDL_Rect * dstr = malloc(sizeof(SDL_Rect));
+	dstr->w = srcr->w;
+	dstr->h = srcr->h;
+	dstr->x = x;
+	dstr->y = y;
+	SDL_Surface * dst = SDL_GetVideoSurface(); 
+	SDL_BlitSurface(*src, srcr, dst, dstr);
+	return 0;
+}
 static int ccsleep(lua_State * L) {
 #ifndef DEBUG
 	sleep(4);
