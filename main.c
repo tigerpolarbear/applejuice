@@ -288,7 +288,7 @@ static int ccblitwholeto(lua_State * L) {
 }
 static int ccsleep(lua_State * L) {
 #ifndef DEBUG
-	sleep(4);
+	sleep(3);
 #endif
 	return 0;
 }

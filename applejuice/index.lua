@@ -10,7 +10,7 @@ splashes = {}
 
 -- stuff
 world = {}
-world.camera = 0
+world.camera = -5000
 world.frame = 1
 world.things = {}
 player = {}
@@ -50,10 +50,10 @@ function initialize()
 	world.player.rframes["stand1"] = cc.frame_new(0, 0, 48, 128)
 	world.player.rframes["stand2"] = cc.frame_new(48, 0, 48, 128)
 	world.player.rframes["stand3"] = cc.frame_new(96, 0, 48, 128)
-	world.player.rframes["1"] = cc.frame_new(144, 0, 48, 128)
-	world.player.rframes["2"] = cc.frame_new(192, 0, 48, 128)
-	world.player.rframes["3"] = cc.frame_new(240, 0, 48, 128)
-	world.player.rframes["4"] = cc.frame_new(288, 0, 48, 128)
+	world.player.rframes["walk1"] = cc.frame_new(144, 0, 48, 128)
+	world.player.rframes["walk2"] = cc.frame_new(192, 0, 48, 128)
+	world.player.rframes["walk3"] = cc.frame_new(240, 0, 48, 128)
+	world.player.rframes["walk4"] = cc.frame_new(288, 0, 48, 128)
 	world.player.rframes["5"] = cc.frame_new(336, 0, 48, 128)
 	world.player.rframes["6"] = cc.frame_new(384, 0, 48, 128)
 	world.player.rframes["7"] = cc.frame_new(432, 0, 48, 128)
@@ -71,10 +71,10 @@ function initialize()
 	world.player.lframes["stand1"] = cc.frame_new(0, 128, 48, 128)
 	world.player.lframes["stand2"] = cc.frame_new(48, 128, 48, 128)
 	world.player.lframes["stand3"] = cc.frame_new(96, 128, 48, 128)
-	world.player.lframes["1"] = cc.frame_new(144, 128, 48, 128)
-	world.player.lframes["2"] = cc.frame_new(192, 128, 48, 128)
-	world.player.lframes["3"] = cc.frame_new(240, 128, 48, 128)
-	world.player.lframes["4"] = cc.frame_new(288, 128, 48, 128)
+	world.player.lframes["walk1"] = cc.frame_new(144, 128, 48, 128)
+	world.player.lframes["walk2"] = cc.frame_new(192, 128, 48, 128)
+	world.player.lframes["walk3"] = cc.frame_new(240, 128, 48, 128)
+	world.player.lframes["walk4"] = cc.frame_new(288, 128, 48, 128)
 	world.player.lframes["5"] = cc.frame_new(336, 128, 48, 128)
 	world.player.lframes["6"] = cc.frame_new(384, 128, 48, 128)
 	world.player.lframes["7"] = cc.frame_new(432, 128, 48, 128)
@@ -99,6 +99,24 @@ function initialize()
 end
 
 function player:update(delta)
+	if player.movestate == "+" then
+		player.vx =  player.vx + 1000;
+	elseif player.movestate == "-" then
+		player.vx = player.vx - 1000
+	elseif player.vx > 0 then
+		player.vx = player.vx -1000
+	elseif player.vx < 0 then
+		player.vx = player.vx + 1000
+	end
+
+	if player.vx > 30000 then
+		player.vx = 30000
+	elseif player.vx < -30000 then
+		player.vx = -30000
+	end
+
+	player.x = player.x + player.vx/100
+
 	if player.state == "chill" then
 		x = world.frame % 36
 		if player.facing == 1 then
@@ -118,6 +136,29 @@ function player:update(delta)
 				player.currentframe = player.lframes["stand3"]
 			end
 		end
+	elseif player.state == "walk" then
+		x = world.frame % 32
+		if player.facing == 1 then
+			if x >= 24 then
+				player.currentframe = player.rframes["walk1"]
+			elseif x >= 16 then
+				player.currentframe = player.rframes["walk2"]
+			elseif x >= 8 then
+				player.currentframe = player.rframes["walk3"]
+			else
+				player.currentframe = player.rframes["walk4"]
+			end
+		else
+			if x >= 24 then
+				player.currentframe = player.lframes["walk1"]
+			elseif x >= 16 then
+				player.currentframe = player.lframes["walk2"]
+			elseif x >= 8 then
+				player.currentframe = player.lframes["walk3"]
+			else
+				player.currentframe = player.lframes["walk4"]
+			end
+		end
 	end
 	cc.frame_setx(player.rect, (player.x/100)-world.camera)
 
@@ -134,8 +175,24 @@ function mainloop(delta)
 		if event[2] == 1 then 
 			if event[1] == "SDLK_LEFT" then
 				player.facing = 0
+				player.movestate = "-"
+				player.state = "walk"
 			elseif event[1] == "SDLK_RIGHT" then
 				player.facing = 1
+				player.movestate = "+"
+				player.state = "walk"
+			end
+		elseif event[2] == 0 then
+			if event[1] == "SDLK_LEFT" then
+				if player.movestate == "-" then
+					player.movestate = " "
+					player.state = "chill"
+				end
+			elseif event[1] == "SDLK_RIGHT" then
+				if player.movestate == "+" then
+					player.movestate = " "
+					player.state = "chill"
+				end
 			end
 		end
 
@@ -165,6 +222,9 @@ function mainloop(delta)
 	player.draw()
 
 	world.frame = world.frame + 1
+
+	pp = player.x/100
+	world.camera = world.camera + (pp - 128 - world.camera)/25
 
 	return
 end
