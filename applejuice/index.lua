@@ -201,9 +201,9 @@ function initialize()
 	world.player.rframes["walk2"] = cc.frame_new(192, 0, 48, 128)
 	world.player.rframes["walk3"] = cc.frame_new(240, 0, 48, 128)
 	world.player.rframes["walk4"] = cc.frame_new(288, 0, 48, 128)
-	world.player.rframes["5"] = cc.frame_new(336, 0, 48, 128)
-	world.player.rframes["6"] = cc.frame_new(384, 0, 48, 128)
-	world.player.rframes["7"] = cc.frame_new(432, 0, 48, 128)
+	world.player.rframes["shit"] = cc.frame_new(336, 0, 48, 128)
+	world.player.rframes["shitty"] = cc.frame_new(384, 0, 48, 128)
+	world.player.rframes["shoot"] = cc.frame_new(432, 0, 48, 128)
 	world.player.rframes["8"] = cc.frame_new(480, 0, 48, 128)
 	world.player.rframes["9"] = cc.frame_new(528, 0, 48, 128)
 	world.player.rframes["10"] = cc.frame_new(576, 0, 48, 128)
@@ -349,11 +349,11 @@ end
 
 function updategoldgolem(t)
 
-	if t.x > (player.x + 48*100 + 48*100) then
+	if t.x > (player.x + 48*100) then
 		t.movestate = "-"
 		t.state = "walk"
 		t.facing = 0
-	elseif t.x < (player.x - 48*100 - 48*100) then
+	elseif t.x < (player.x - 48*100) then
 		t.movestate = "+"
 		t.state = "walk"
 		t.facing = 1
@@ -432,11 +432,11 @@ end
 
 function updatezip(t)
 
-	if t.x > (player.x + 48*100 + 48*100) then
+	if t.x > (player.x + 48*100) then
 		t.movestate = "-"
 		t.state = "walk"
 		t.facing = 0
-	elseif t.x < (player.x - 48*100 - 48*100) then
+	elseif t.x < (player.x - 48*100) then
 		t.movestate = "+"
 		t.state = "walk"
 		t.facing = 1
@@ -515,11 +515,11 @@ end
 
 function updatetwrex(t)
 
-	if t.x > (player.x + 48*100 + 48*100) then
+	if t.x > (player.x + 48*100) then
 		t.movestate = "-"
 		t.state = "walk"
 		t.facing = 0
-	elseif t.x < (player.x - 48*100 - 48*100) then
+	elseif t.x < (player.x - 48*100) then
 		t.movestate = "+"
 		t.state = "walk"
 		t.facing = 1
@@ -613,6 +613,12 @@ function mainloop(delta)
 				player.facing = 1
 				player.movestate = "+"
 				player.state = "walk"
+			elseif event[1] == "SDLK_q" then
+			elseif event[1] == "SDLK_w" then
+			elseif event[1] == "SDLK_a" then
+			elseif event[1] == "SDLK_s" then
+			elseif event[1] == "SDLK_z" then
+			elseif event[1] == "SDLK_x" then
 			end
 		elseif event[2] == 0 then
 			if event[1] == "SDLK_LEFT" then
